@@ -14,6 +14,9 @@ API<br/>
 composer require darkaonline/l5-swagger<br/>
 
 ### 環境構築
+.envの作成
+rootの.env.exampleをコピぺして.envに名前を変更する
+
 プロジェクトのrootで下記を実行（dockerをバッググラウンドで起動）<br/>
 docker-compose up -d<br/>
 

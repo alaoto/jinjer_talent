@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('master_admins', function (Blueprint $table) {
+        Schema::create('master_users', function (Blueprint $table) {
             $table->id();
-            $table->string('admin_name');
-            $table->string('password');
+            $table->string('admin_name', 255);
+            $table->string('password', 255);
             $table->dateTime('last_login')->nullable();
             $table->dateTime('failure_start_datetime')->nullable();
             $table->tinyInteger('failure_cnt')->nullable();
@@ -30,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('master_admins');
+        Schema::dropIfExists('master_users');
     }
 };

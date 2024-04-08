@@ -11,18 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('master_admins', function (Blueprint $table) {
-            $table->id();
-            $table->string('admin_name');
-            $table->string('password');
-            $table->dateTime('last_login')->nullable();
-            $table->dateTime('failure_start_datetime')->nullable();
-            $table->tinyInteger('failure_cnt')->nullable();
-            $table->dateTime('failure_stop_datatime')->nullable();
-            $table->timestamp('created_at')->useCurrent();
-            $table->timestamp('updated_at')->useCurrentOnUpdate();
-            $table->dateTime('deleted_at')->nullable();
-        });
+        if (!Schema::hasTable('master_admins')) {
+            Schema::create('master_admins', function (Blueprint $table) {
+                $table->id();
+                $table->string('admin_name');
+                $table->string('password');
+                $table->dateTime('last_login')->nullable();
+                $table->dateTime('failure_start_datetime')->nullable();
+                $table->tinyInteger('failure_cnt')->nullable();
+                $table->dateTime('failure_stop_datatime')->nullable();
+                $table->timestamp('created_at')->useCurrent();
+                $table->timestamp('updated_at')->useCurrentOnUpdate();
+                $table->dateTime('deleted_at')->nullable();
+            });
+        }
     }
 
     /**

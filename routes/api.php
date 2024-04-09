@@ -19,5 +19,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// 全データの取得
 Route::get('/masteradmins', [MasterAdminsController::class, 'readMasterAdmins']);
+// 新規データの登録
 Route::post('/masteradmins', [MasterAdminsController::class, 'createMasterAdmin']);

@@ -11,7 +11,6 @@ class DataUsers extends Model
 
     protected $table = 'data_users';
     protected $fillable = [
-        'id',
         'user_id',
         'first_name',
         'last_name',

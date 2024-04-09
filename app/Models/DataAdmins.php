@@ -11,7 +11,6 @@ class DataAdmins extends Model
 
     protected $table = 'data_admins';
     protected $fillable = [
-        'id',
         'admin_id',
         'permission_code',
         'first_name',

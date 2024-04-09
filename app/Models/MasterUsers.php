@@ -29,6 +29,6 @@ class MasterUsers extends Authenticatable
     // リレーションシップの定義
     public function userDetails()
     {
-        return $this->hasOne(DataUser::class, 'user_id');
+        return $this->hasOne(DataUsers::class, 'user_id');
     }
 }

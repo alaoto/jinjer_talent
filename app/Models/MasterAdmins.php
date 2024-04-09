@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\DataAdmins;
 
 class MasterAdmins extends Authenticatable
 {
@@ -38,6 +39,6 @@ class MasterAdmins extends Authenticatable
     // リレーションシップの定義
     public function adminDetails()
     {
-        return $this->hasOne(DataAdmin::class, 'admin_id');
+        return $this->hasOne(DataAdmins::class, 'admin_id');
     }
 }

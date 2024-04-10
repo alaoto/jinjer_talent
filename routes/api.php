@@ -23,3 +23,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/masteradmins', [MasterAdminsController::class, 'readMasterAdmins']);
 // 新規データの登録
 Route::post('/masteradmins', [MasterAdminsController::class, 'createMasterAdmin']);
+// 既存データの更新
+Route::PUT('/masteradmins/{id}', [MasterAdminsController::class, 'updateMasterAdmin']);

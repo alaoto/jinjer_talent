@@ -64,4 +64,20 @@ class MasterAdminsController extends Controller
             return response()->json(['error' => $e->getMessage()], 403);
         }
     }
+
+    public function deleteMasterAdmin($id) {
+        try {
+            // レコードを検索する
+            $masterAdmin = MasterAdmins::findOrFail($id);
+            // レコードを削除する
+            $masterAdmin->delete();
+            // JSON形式でデータを返す
+            return response()->json($masterAdmin, 200);
+        } catch (\Exception $e) {
+            // エラーメッセージをログに記録
+            Log::error($e->getMessage());
+            // 403エラーを返す
+            return response()->json(['error' => $e->getMessage()], 403);
+        }
+    }
 }

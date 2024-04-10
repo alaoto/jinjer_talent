@@ -25,3 +25,5 @@ Route::get('/masteradmins', [MasterAdminsController::class, 'readMasterAdmins'])
 Route::post('/masteradmins', [MasterAdminsController::class, 'createMasterAdmin']);
 // 既存データの更新
 Route::PUT('/masteradmins/{id}', [MasterAdminsController::class, 'updateMasterAdmin']);
+// 既存データの論理削除
+Route::delete('/masteradmins/{id}', [MasterAdminsController::class, 'deleteMasterAdmin']);

@@ -22,6 +22,20 @@ class MasterAdminsController extends Controller
         }
     }
 
+    public function readMasterAdmin($id) {
+        try {
+            // MasterAdminモデルを使用して指定されたIDの管理者を取得
+            $masterAdmin = MasterAdmins::findOrFail($id);
+            // JSON形式でデータを返す
+            return response()->json($masterAdmin, 200);
+        } catch (\Exception $e) {
+            // エラーメッセージをログに記録
+            Log::error($e->getMessage());
+            // 403エラーを返す
+            return response()->json(['error' => $e->getMessage()], 403);
+        }
+    }
+
     public function createMasterAdmin(Request $request) {
         try {
             $validatedData = $request->validate([
@@ -48,7 +62,6 @@ class MasterAdminsController extends Controller
                 'admin_name' => 'required',
                 'password' => 'required',
             ]);
-            throw new Exception('errorだよ');
             // レコードを検索する
             $masterAdmin = MasterAdmins::findOrFail($id);
             // レコードを更新する

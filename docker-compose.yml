@@ -7,13 +7,18 @@ services:
       - ./:/var/www/html
     ports:
       - 80:80
+    depends_on:
+      - app
 
   app:
     build:
       context: .
+      container_name: laravel-app
       dockerfile: Dockerfile
     volumes:
       - ./:/var/www/html
+    depends_on:
+      - db
 
   db:
     image: mysql:8.0

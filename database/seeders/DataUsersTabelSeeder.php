@@ -27,7 +27,7 @@ class DataUsersTabelSeeder extends Seeder
                 'zipcode' => fake()->postcode(),
                 'prefcode' => fake()->numberBetween(1, 47),
                 'city' => fake()->city(),
-                'address1' => fake()->streetAddress(),
+                'address' => fake()->streetAddress(),
                 'tel' => fake()->phoneNumber(),
                 'created_at' => now(),
                 'updated_at' => now(),

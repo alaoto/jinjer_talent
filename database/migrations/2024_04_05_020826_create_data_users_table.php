@@ -23,7 +23,7 @@ return new class extends Migration
                 $table->string('zipcode', 255)->nullable();
                 $table->tinyInteger('prefcode')->nullable();
                 $table->string('city', 255)->nullable();
-                $table->string('address1', 255)->nullable();
+                $table->string('address', 255)->nullable();
                 $table->string('tel', 255)->nullable();
                 $table->timestamp('created_at')->useCurrent();
                 $table->timestamp('updated_at')->useCurrentOnUpdate();

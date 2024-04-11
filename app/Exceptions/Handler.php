@@ -45,4 +45,13 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof \Illuminate\Auth\AuthenticationException) {
+            return response()->json(['message' => '認証されていません。再度ログインが必要です。'], 401);
+        }
+
+        return parent::render($request, $exception);
+    }
 }

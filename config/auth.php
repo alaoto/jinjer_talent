@@ -40,6 +40,16 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'admin' => [
+            'driver'   => 'session',
+            'provider' => 'admins',
+        ],
+        'api' => [
+            'driver'   => 'sanctum',
+            'provider' => 'users',
+            'hash' => false,
+        ],
+        
     ],
 
     /*
@@ -62,13 +72,18 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\Models\User::class,
+            //'model' => App\Models\User::class,
+            'model' => App\Models\MasterUser::class,
         ],
 
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\MasterAdmin::class,
+        ],
     ],
 
     /*
@@ -91,8 +106,8 @@ return [
     */
 
     'passwords' => [
-        'users' => [
-            'provider' => 'users',
+        'admins' => [
+            'provider' => 'admins',
             'table' => 'password_reset_tokens',
             'expire' => 60,
             'throttle' => 60,

@@ -20,8 +20,6 @@ class EmployeeController extends Controller
         } catch (\Exception $e) {
             // エラーメッセージをログに記録
             Log::error($e->getMessage());
-            // 403エラーを返す
-            return response()->json(['error' => $e->getMessage()], 403);
         }
     }
 
@@ -80,8 +78,6 @@ class EmployeeController extends Controller
             DB::rollBack();
             // エラーメッセージをログに記録
             Log::error($e->getMessage());
-            // 403エラーを返す
-            return response()->json(['error' => $e->getMessage()], 403);
         }
     }
 
@@ -99,7 +95,11 @@ class EmployeeController extends Controller
                 "tel" => "required",
             ]);
             // レコードを検索する
-            $dataUsers = DataUsers::findOrFail($id);
+            $dataUsers = DataUsers::find($id);
+            if ($dataUsers === null) {
+                return response()->json(['error' => '指定されたIDの従業員が存在しません。'], 404);
+            }
+            $dataUsers = DataUsers::where('user_id', $id)->firstOrFail();
             // レコードを更新する
             $dataUsers->last_name = $request->last_name;
             $dataUsers->first_name = $request->first_name;
@@ -111,13 +111,23 @@ class EmployeeController extends Controller
             $dataUsers->address1 = $request->address1;
             $dataUsers->tel = $request->tel;
             $dataUsers->save();
+            $responseData = [
+                "user_id" => $dataUsers->user_id,
+                "last_name" => $dataUsers->last_name,
+                "first_name" => $dataUsers->first_name,
+                "birthday" => $dataUsers->birthday,
+                "email" => $dataUsers->email,
+                "zipcode" => $dataUsers->zipcode,
+                "prefcode" => $dataUsers->prefcode,
+                "city" => $dataUsers->city,
+                "address" => $dataUsers->address1,
+                "tel" => $dataUsers->tel
+            ];
             // JSON形式でデータを返す
-            return response()->json($dataUsers, 200);
+            return response()->json($responseData, 200);
         } catch (\Exception $e) {
             // エラーメッセージをログに記録
             Log::error($e->getMessage());
-            // 403エラーを返す
-            return response()->json(['error' => $e->getMessage()], 403);
         }
     }
 
@@ -125,7 +135,10 @@ class EmployeeController extends Controller
         try {
             DB::beginTransaction();
             // レコードを検索する
-            $dataUsers = DataUsers::where('user_id', $id)->firstOrFail();
+            $dataUsers = DataUsers::where('user_id', $id)->first();
+            if ($dataUsers === null) {
+                return response()->json(['error' => '指定されたIDの従業員が存在しません。'], 404);
+            }
             $masterUsers = MasterUsers::findOrFail($id);
             // レコードを削除する
             $dataUsers->delete();
@@ -137,8 +150,6 @@ class EmployeeController extends Controller
             DB::rollBack();
             // エラーメッセージをログに記録
             Log::error($e->getMessage());
-            // 403エラーを返す
-            return response()->json(['error' => $e->getMessage()], 403);
         }
     }
 }

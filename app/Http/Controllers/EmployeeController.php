@@ -12,9 +12,11 @@ class EmployeeController extends Controller
 {
     public function index() {
         try {
-            $columns = ['user_id', 'last_name', 'first_name', 'birthday', 'email', 'zipcode', 'prefcode', 'city', 'address1', 'tel'];
+            $columns = ['user_id', 'last_name', 'first_name', 'birthday', 'email', 'zipcode', 'prefcode', 'city', 'address', 'tel'];
+
             // DataUsersモデルを使用してすべてのユーザーを取得
             $dataUsers = DataUsers::select($columns)->get();
+
             // JSON形式でデータを返す
             return response()->json($dataUsers, 200);
         } catch (\Exception $e) {
@@ -37,15 +39,15 @@ class EmployeeController extends Controller
                 'zipcode' => 'required',
                 'prefcode' => 'required',
                 'city' => 'required',
-                'address1' => 'required',
+                'address' => 'required',
                 'tel' => 'required',
             ]);
+
             // 新規データを登録する
             $masterUsers = MasterUsers::create([
                 'user_name' => $validatedData['user_name'],
                 'password' => Hash::make($validatedData['password']),
             ]);
-            // このタイミングでMasterUsersがIDを何で登録したか分かりますか？
             DataUsers::create([
                 'user_id' => $masterUsers->id,
                 'last_name' => $validatedData['last_name'],
@@ -55,9 +57,11 @@ class EmployeeController extends Controller
                 'zipcode' => $validatedData['zipcode'],
                 'prefcode' => $validatedData['prefcode'],
                 'city' => $validatedData['city'],
-                'address1' => $validatedData['address1'],
+                'address' => $validatedData['address'],
                 'tel' => $validatedData['tel'],
             ]);
+
+            // レスポンスデータを作成する
             $responseData = [
                 'user_name' => $validatedData['user_name'],
                 'user_id' => $validatedData['user_id'],
@@ -68,10 +72,11 @@ class EmployeeController extends Controller
                 'zipcode' => $validatedData['zipcode'],
                 'prefcode' => $validatedData['prefcode'],
                 'city' => $validatedData['city'],
-                'address1' => $validatedData['address1'],
+                'address' => $validatedData['address'],
                 'tel' => $validatedData['tel'],
             ];
             DB::commit();
+
             // JSON形式でデータを返す
             return response()->json($responseData, 200);
         } catch (\Exception $e) {
@@ -91,15 +96,17 @@ class EmployeeController extends Controller
                 "zipcode" => "required",
                 "prefcode" => "required",
                 "city" => "required",
-                "address1" => "required",
+                "address" => "required",
                 "tel" => "required",
             ]);
+
             // レコードを検索する
             $dataUsers = DataUsers::find($id);
-            if ($dataUsers === null) {
+            if (is_null($dataUsers)) {
                 return response()->json(['error' => '指定されたIDの従業員が存在しません。'], 404);
             }
             $dataUsers = DataUsers::where('user_id', $id)->firstOrFail();
+
             // レコードを更新する
             $dataUsers->last_name = $request->last_name;
             $dataUsers->first_name = $request->first_name;
@@ -108,7 +115,7 @@ class EmployeeController extends Controller
             $dataUsers->zipcode = $request->zipcode;
             $dataUsers->prefcode = $request->prefcode;
             $dataUsers->city = $request->city;
-            $dataUsers->address1 = $request->address1;
+            $dataUsers->address = $request->address;
             $dataUsers->tel = $request->tel;
             $dataUsers->save();
             $responseData = [
@@ -120,9 +127,10 @@ class EmployeeController extends Controller
                 "zipcode" => $dataUsers->zipcode,
                 "prefcode" => $dataUsers->prefcode,
                 "city" => $dataUsers->city,
-                "address" => $dataUsers->address1,
+                "address" => $dataUsers->address,
                 "tel" => $dataUsers->tel
             ];
+
             // JSON形式でデータを返す
             return response()->json($responseData, 200);
         } catch (\Exception $e) {
@@ -136,14 +144,16 @@ class EmployeeController extends Controller
             DB::beginTransaction();
             // レコードを検索する
             $dataUsers = DataUsers::where('user_id', $id)->first();
-            if ($dataUsers === null) {
+            if (is_null($dataUsers)) {
                 return response()->json(['error' => '指定されたIDの従業員が存在しません。'], 404);
             }
             $masterUsers = MasterUsers::findOrFail($id);
+
             // レコードを削除する
             $dataUsers->delete();
             $masterUsers->delete();
             DB::commit();
+
             // JSON形式でデータを返す
             return response()->json(['user_id' => $dataUsers->user_id], 200);
         } catch (\Exception $e) {

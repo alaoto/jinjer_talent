@@ -21,7 +21,7 @@ class DataUsers extends Model
         'zipcode',
         'prefcode',
         'city',
-        'address1',
+        'address',
         'tel',
         'created_at',
         'updated_at',

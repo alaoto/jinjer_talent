@@ -38,7 +38,7 @@ class AuthController extends Controller
         $credentials = $request->only('admin_name', 'password');
 
         if (!Auth::guard('admin')->attempt($credentials)) {
-            return response()->json(['message' => 'ログイン認証に失敗しました。'], 401);
+            return response()->json(['message' => '認証に失敗しました。ユーザIDまたはパスワードが正しくありません。'], 401);
         }
 
         $admin = Auth::guard('admin')->user();

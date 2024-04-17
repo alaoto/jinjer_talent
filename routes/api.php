@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,14 +24,18 @@ use App\Http\Controllers\EmployeeController;
 Route::post('/login/user', [AuthController::class, 'loginUser']);
 Route::post('/admin/login', [AuthController::class, 'loginAdmin']);
 
-
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/employees', [EmployeeController::class, 'index']);
-    Route::get('/employees/{id}', [EmployeeController::class, 'show']);
     Route::post('/employees', [EmployeeController::class, 'store']);
     Route::put('/employees/{id}', [EmployeeController::class, 'update']);
     Route::delete('/employees/{id}', [EmployeeController::class, 'destroy']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/admin', [AdminController::class, 'index']);
+    Route::post('/admin/register', [AdminController::class, 'store']);
+    Route::put('/admin/{id}', [AdminController::class, 'update']);
+    Route::delete('/admin/{id}', [AdminController::class, 'destroy']);
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {

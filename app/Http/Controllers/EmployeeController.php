@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Models\DataUsers;
 use App\Models\MasterUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Http\Requests\EmployeeRequest;
 
 class EmployeeController extends Controller
 {
@@ -22,58 +24,45 @@ class EmployeeController extends Controller
         } catch (\Exception $e) {
             // エラーメッセージをログに記録
             Log::error($e->getMessage());
+            return response()->json(['message' => '内部サーバーエラーが発生しました。'], 500);
         }
     }
 
-    public function store(Request $request) {
+    public function store(EmployeeRequest $request) {
         try {
             DB::beginTransaction();
-            $validatedData = $request->validate([
-                'user_name' => 'required',
-                'password' => 'required',
-                'user_id' => 'required',
-                'last_name' => 'required',
-                'first_name' => 'required',
-                'birthday' => 'required',
-                'email' => 'required',
-                'zipcode' => 'required',
-                'prefcode' => 'required',
-                'city' => 'required',
-                'address' => 'required',
-                'tel' => 'required',
-            ]);
 
             // 新規データを登録する
             $masterUsers = MasterUsers::create([
-                'user_name' => $validatedData['user_name'],
-                'password' => Hash::make($validatedData['password']),
+                'user_name' => $request->user_name,
+                'password' => Hash::make($request->password),
             ]);
             DataUsers::create([
                 'user_id' => $masterUsers->id,
-                'last_name' => $validatedData['last_name'],
-                'first_name' => $validatedData['first_name'],
-                'birthday' => $validatedData['birthday'],
-                'email' => $validatedData['email'],
-                'zipcode' => $validatedData['zipcode'],
-                'prefcode' => $validatedData['prefcode'],
-                'city' => $validatedData['city'],
-                'address' => $validatedData['address'],
-                'tel' => $validatedData['tel'],
+                'last_name' => $request->last_name,
+                'first_name' => $request->first_name,
+                'birthday' => $request->birthday,
+                'email' => $request->email,
+                'zipcode' => $request->zipcode,
+                'prefcode' => $request->prefcode,
+                'city' => $request->city,
+                'address' => $request->address,
+                'tel' => $request->tel,
             ]);
 
             // レスポンスデータを作成する
             $responseData = [
-                'user_name' => $validatedData['user_name'],
-                'user_id' => $validatedData['user_id'],
-                'last_name' => $validatedData['last_name'],
-                'first_name' => $validatedData['first_name'],
-                'birthday' => $validatedData['birthday'],
-                'email' => $validatedData['email'],
-                'zipcode' => $validatedData['zipcode'],
-                'prefcode' => $validatedData['prefcode'],
-                'city' => $validatedData['city'],
-                'address' => $validatedData['address'],
-                'tel' => $validatedData['tel'],
+                'user_name' => $request->user_name,
+                'user_id' => $masterUsers->id,
+                'last_name' => $request->last_name,
+                'first_name' => $request->first_name,
+                'birthday' => $request->birthday,
+                'email' => $request->email,
+                'zipcode' => $request->zipcode,
+                'prefcode' => $request->prefcode,
+                'city' => $request->city,
+                'address' => $request->address,
+                'tel' => $request->tel,
             ];
             DB::commit();
 
@@ -83,23 +72,12 @@ class EmployeeController extends Controller
             DB::rollBack();
             // エラーメッセージをログに記録
             Log::error($e->getMessage());
+            return response()->json(['message' => '内部サーバーエラーが発生しました。'], 500);
         }
     }
 
-    public function update(Request $request, $id) {
+    public function update(EmployeeRequest $request, $id) {
         try {
-            $request->validate([
-                "last_name" => "required",
-                "first_name" => "required",
-                "birthday" => "required",
-                "email" => "required",
-                "zipcode" => "required",
-                "prefcode" => "required",
-                "city" => "required",
-                "address" => "required",
-                "tel" => "required",
-            ]);
-
             // レコードを検索する
             $dataUsers = DataUsers::find($id);
             if (is_null($dataUsers)) {
@@ -136,6 +114,7 @@ class EmployeeController extends Controller
         } catch (\Exception $e) {
             // エラーメッセージをログに記録
             Log::error($e->getMessage());
+            return response()->json(['message' => '内部サーバーエラーが発生しました。'], 500);
         }
     }
 
@@ -160,6 +139,7 @@ class EmployeeController extends Controller
             DB::rollBack();
             // エラーメッセージをログに記録
             Log::error($e->getMessage());
+            return response()->json(['message' => '内部サーバーエラーが発生しました。'], 500);
         }
     }
 }
